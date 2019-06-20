@@ -1,18 +1,18 @@
 li[data-ui-id*="menu-webbytroops-core-core"]>a {
     &:before {
-        background-image: url('WebbyTroops_Core::images/logo70.png');
+        background-image: url('WebbyTroops_Core::images/logo.png');
         background-repeat: no-repeat;
         background-size: 100% !important;
-        content: ' ' !important;
+        content: '' !important;
         display: inline-block !important;
-        float: none;
-        height: 40px !important;
-        margin-right: auto;
-        opacity: 1;
-        text-align: center;
-        width: 40px !important;
+        width: 48px !important;
     }
     &:hover:before{
-       background-position: 0px -40px;
+       background-position: 0px -26px;
+    }
+}
+li[data-ui-id*="menu-webbytroops-core-core"]._active>a {
+    &:before{
+       background-position: 0px -26px;
     }
 }
