@@ -1,9 +1,6 @@
 {
     "name": "webbytroopstechnologies/magento2-module-core",
     "description": "Core module for WebbyTroops Magento2 modules",
-    "require": {
-        "php": "~7.0.13|~7.1.0"
-    },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "type": "magento2-module",
