@@ -6,7 +6,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>  
-        <add id="WebbyTroops_Core::core" title="WebbyTroops" translate="title" module="WebbyTroops_Core" sortOrder="70" resource="WebbyTroops_Core::core"/>
-        <add id="WebbyTroops_Core::configurations" title="Configurations" translate="title" module="WebbyTroops_Core" sortOrder="100" parent="WebbyTroops_Core::core" resource="WebbyTroops_Core::configurations"/>
+        <add id="WebbyTroops_Core::core" title="WebbyTroops" translate="title" module="WebbyTroops_Core" sortOrder="20" resource="WebbyTroops_Core::core"/>
     </menu>
 </config>

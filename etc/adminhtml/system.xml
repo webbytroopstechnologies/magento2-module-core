@@ -7,8 +7,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <tab id="webbytroops" translate="label" sortOrder="50">
-            <label><![CDATA[<div class='wt-logo'></div>]]></label>
+        <tab id="webbytroops" translate="label" sortOrder="50" class="wt-logo">
+            <label>WebbyTroops</label>
         </tab>
     </system>
 </config>
