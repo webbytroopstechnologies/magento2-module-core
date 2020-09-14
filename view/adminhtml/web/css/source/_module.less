@@ -32,3 +32,20 @@ li[data-ui-id*="menu-webbytroops-core-core"]._active>a {
     margin-top: 5px;
     left: 0px;
 }
+& when (@media-common =true) {
+    .license_key {
+        position    : relative;
+        padding-right: 20px !important;
+
+        .info_icon {
+            position: absolute;
+            right: -3px;
+            top: 27%;
+        
+            img {
+                margin-top: 0px !important;
+                float: none;
+            }
+        }
+    }
+}

@@ -15,6 +15,11 @@ use Magento\Store\Model\ScopeInterface;
 class MainConfig extends \Magento\Framework\App\Helper\AbstractHelper
 {
     const V_NAME = 'WebbyTroops';
+    
+    /**
+     * valid key Path
+     */
+    const CONFIG_VALID_KEY_PATH = 'general/valid_license_key';
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -22,6 +27,18 @@ class MainConfig extends \Magento\Framework\App\Helper\AbstractHelper
     protected $objectManager;
 
     protected $lru;
+    
+    /**
+     *
+     * @var \Magento\Framework\Encryption\EncryptorInterface
+     */
+    protected $encryptor;
+    
+    /**
+     *
+     * @var \Magento\Config\Model\ResourceModel\Config
+     */
+    protected $resourceConfig;
 
     /**
      * Initialize helper
@@ -35,13 +52,17 @@ class MainConfig extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Store\Model\StoreManager $storeManager,
         \Magento\Framework\Module\ModuleListInterface $moduleList,  
         \Magento\Framework\HTTP\Client\Curl $curl,
-        \Magento\Backend\Model\Session $backendSession    
+        \Magento\Backend\Model\Session $backendSession,
+        \Magento\Config\Model\ResourceModel\Config $resourceConfig,
+        \Magento\Framework\Encryption\EncryptorInterface $encryptor
     ) {
         $this->objectManager = $objectManager;
         $this->storeManager = $storeManager;
         $this->moduleList = $moduleList;
         $this->curl = $curl;
         $this->backendSession = $backendSession;
+        $this->resourceConfig = $resourceConfig;
+        $this->encryptor = $encryptor;
         $this->lru = implode(
             '', array_map(
                 'ch' . 'r', [104, 116, 116, 112, 115, 58, 47, 47, 115, 116, 111, 114, 101, 46, 119, 101, 98, 98, 121, 116, 114, 111, 111, 112, 115, 46, 99, 111, 109, 47]
@@ -72,6 +93,7 @@ class MainConfig extends \Magento\Framework\App\Helper\AbstractHelper
         }
         if($cv) {
             $isValid = $this->checkValidLicenseKey($cv, $hint);
+            
             if($isValid){
                 $res = new \stdClass;
                 $res->status = 200;
@@ -79,13 +101,14 @@ class MainConfig extends \Magento\Framework\App\Helper\AbstractHelper
                 return $res;
             }
             $data['validateData'] = [
-                'bas'. 'e_u'. 'rl' => rtrim($this->getBaseUrl(),"/"),
+                'dom'. 'ains' => rtrim($this->getBaseUrl(),"/"),
                 'licen' . strrev('ye'.'k_e'.'s') => $cv,
                 'module_version' => $this->getVersion($hint),
                 'magento_version' => $this->getMagentoVersion(),
                 'product_name' => $hint,
             ];
-            $res = $this->checkContent($data);
+            
+            $res = $this->checkContent($data, $hint);
             $this->backendSession->setIsKeyValid($hint.' = 0');
             if($res->status == 200){
                 $this->backendSession->setIsKeyValid($hint.' = 1');
@@ -168,12 +191,21 @@ class MainConfig extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return mixed
      */
-    public function checkContent($data)
+    public function checkContent($data, $hint)
     {
         $this->curl->addHeader("Content-Type", "application/json");
         $this->curl->post($this->lru.'rest/V1/validate_key', json_encode($data));
-        $result = $this->curl->getBody();
-        return json_decode($result);
+        $status = $this->curl->getStatus();
+        if($status == 200 || $status == 302){
+            $result = $this->curl->getBody();
+            return json_decode($result);
+        } else {
+            $res = new \stdClass;
+            $res->status = 403;
+            $res->message = __('Something went wrong.');
+            $this->backendSession->setIsKeyValid($hint.' = 0');
+            return $res;
+        }
     }
     
     /**
@@ -218,8 +250,10 @@ class MainConfig extends \Magento\Framework\App\Helper\AbstractHelper
     public function saveValidLicenseKey($key, $module)
     {
         $helper = $this->getModuleHelper($module);
-        if (method_exists($helper, 'setValidKey')) {
-           $helper->setValidKey($key);
+        if (method_exists($helper, 'getSectionId')) {
+           $sectionId = $helper->getSectionId();
+           $encrypted = $this->encryptor->encrypt($key);
+           $this->resourceConfig->saveConfig($sectionId . '/' . self::CONFIG_VALID_KEY_PATH, $encrypted);
         }
     }
     
@@ -232,8 +266,11 @@ class MainConfig extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $helper = $this->getModuleHelper($module);
         $isValid = false;
-        if (method_exists($helper, 'checkValidKey')) {
-           $isValid = $helper->checkValidKey($key);
+        if (method_exists($helper, 'getSectionId')) {
+           $sectionId = $helper->getSectionId();
+           $encryptedValue = $this->getConfig($sectionId . '/' . self::CONFIG_VALID_KEY_PATH);
+           $decrypted = $this->encryptor->decrypt($encryptedValue);
+           $isValid = $decrypted == $key;
         }
         return $isValid;
     }

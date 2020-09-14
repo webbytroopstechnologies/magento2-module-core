@@ -114,7 +114,7 @@ abstract class AbstractStoreConfig implements \Magento\Framework\Event\ObserverI
             0
         );
         $kl = strrev('ye'.'k_e'.'sne'.'cil');
-        
+         
         if (is_array($v) && array_key_exists($kl, $v)) {
             return true;
         }
@@ -137,6 +137,7 @@ abstract class AbstractStoreConfig implements \Magento\Framework\Event\ObserverI
     protected function getModuleBySection($section)
     {
         $w = 'licen' . strrev('ye'.'k_e'.'s'); $e = 'gen'.'eral';
+        
         foreach ($section->getChildren() as $group) {
             if ($group->getId() == $e) {
                 foreach ($group->getChildren() as $field) {
