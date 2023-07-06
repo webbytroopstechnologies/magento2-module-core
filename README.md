@@ -3,7 +3,7 @@ Thank you for using our product.
 This extension is developed by [WebbyTroops Technologies](https://webbytroops.com/). This extension is build as a base for Magento2 extensions.
 
 ## Composer Installation
-<pre>composer require sergeevpasha/laravel-dellin</pre>
+<pre>composer require webbytroopstechnologies/magento2-module-core</pre>
 
 ## Manual Installation
 <pre>
