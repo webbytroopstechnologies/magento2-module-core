@@ -25,6 +25,7 @@ class MainConfig extends \Magento\Framework\App\Helper\AbstractHelper
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
+    
 
     protected $lru;
     
@@ -33,6 +34,30 @@ class MainConfig extends \Magento\Framework\App\Helper\AbstractHelper
      * @var \Magento\Framework\Encryption\EncryptorInterface
      */
     protected $encryptor;
+    
+    /**
+     *
+     * @var \Magento\Store\Model\StoreManager
+     */
+    protected $storeManager;
+    
+    /**
+     *
+     * @var \Magento\Framework\Module\ModuleListInterface
+     */
+    protected $moduleList;
+    
+    /**
+     *
+     * @var \Magento\Framework\HTTP\Client\Curl
+     */
+    protected $curl;
+    
+    /**
+     *
+     * @var \Magento\Backend\Model\Session
+     */
+    protected $backendSession;
     
     /**
      *
