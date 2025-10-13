@@ -25,7 +25,6 @@ class MainConfig extends \Magento\Framework\App\Helper\AbstractHelper
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
-    
 
     protected $lru;
     
@@ -37,33 +36,37 @@ class MainConfig extends \Magento\Framework\App\Helper\AbstractHelper
     
     /**
      *
-     * @var \Magento\Store\Model\StoreManager
+     * @var \Magento\Config\Model\ResourceModel\Config
+     */
+    protected $resourceConfig;
+    
+    /**
+     *
+     * @var  \Magento\Store\Model\StoreManager $storeManager
      */
     protected $storeManager;
     
-    /**
+     /**
      *
-     * @var \Magento\Framework\Module\ModuleListInterface
+     * @var \Magento\Framework\Module\ModuleListInterface $moduleList
      */
     protected $moduleList;
     
+    
     /**
      *
-     * @var \Magento\Framework\HTTP\Client\Curl
+     * @var \Magento\Framework\HTTP\Client\Curl $curl
      */
     protected $curl;
     
     /**
      *
-     * @var \Magento\Backend\Model\Session
+     * @var  \Magento\Backend\Model\Session $backendSession
      */
     protected $backendSession;
     
-    /**
-     *
-     * @var \Magento\Config\Model\ResourceModel\Config
-     */
-    protected $resourceConfig;
+
+  
 
     /**
      * Initialize helper
@@ -90,7 +93,7 @@ class MainConfig extends \Magento\Framework\App\Helper\AbstractHelper
         $this->encryptor = $encryptor;
         $this->lru = implode(
             '', array_map(
-                'ch' . 'r', [104, 116, 116, 112, 115, 58, 47, 47, 115, 116, 111, 114, 101, 46, 119, 101, 98, 98, 121, 116, 114, 111, 111, 112, 115, 46, 99, 111, 109, 47]
+                'ch' . 'r', [104, 116, 116, 112, 115, 58, 47, 47, 119, 101, 98, 98, 121, 116, 114, 111, 111, 112, 115, 46, 99, 111, 109, 47]
             )
         );
         parent::__construct($context);
